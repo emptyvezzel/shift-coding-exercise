@@ -1,4 +1,5 @@
 # User Management API
+REST API that imports user data and stores it in a SQLite database
 
 ## Prerequisites
 
