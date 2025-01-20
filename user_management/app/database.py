@@ -31,7 +31,7 @@ def insert_users(users):
 
     for user in users:
         cursor.execute("SELECT COUNT(*) FROM user_data WHERE user_id = ?", (user['id'],))
-        if cursor.fetchone()[0] == 0:  # Insert only if user doesn't exist
+        if cursor.fetchone()[0] == 0:
             cursor.execute('''
                 INSERT INTO user_data (user_id, full_name, contact_email, street_address, apt_number, town, postal_code, phone_number, employer)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
