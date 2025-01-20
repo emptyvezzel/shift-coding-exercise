@@ -28,11 +28,19 @@ def create_user_table():
 def insert_users(users):
     connection = get_db_connection()
     cursor = connection.cursor()
+
     for user in users:
-        cursor.execute('''
-            INSERT INTO user_data (user_id, full_name, contact_email, street_address, apt_number, town, postal_code, phone_number, employer)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (user['id'], user['name'], user['email'], user['address']['street'], user['address']['suite'],
-              user['address']['city'], user['address']['zipcode'], user['phone'], user['company']['name']))
+        cursor.execute("SELECT COUNT(*) FROM user_data WHERE user_id = ?", (user['id'],))
+        if cursor.fetchone()[0] == 0:  # Insert only if user doesn't exist
+            cursor.execute('''
+                INSERT INTO user_data (user_id, full_name, contact_email, street_address, apt_number, town, postal_code, phone_number, employer)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                user['id'], user['name'], user['email'],
+                user['address']['street'], user['address']['suite'],
+                user['address']['city'], user['address']['zipcode'],
+                user['phone'], user['company']['name']
+            ))
+    
     connection.commit()
     connection.close()
